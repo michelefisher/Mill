@@ -4,6 +4,7 @@
 #include <vector>
 #include "ShaderProgram.h"
 #include "objects/BasicObject.h"
+#include "SOIL/soil.h"
 
 using namespace std;
 
@@ -64,20 +65,55 @@ GLFWwindow* setupWindow() {
 int main() {
     GLFWwindow* window = setupWindow();
 
+    GLuint texture1 = SOIL_load_OGL_texture(
+            "/Users/dominiktrusinski/Feniks z Popiołów/GKOM/Mill2/container.jpg",
+            SOIL_LOAD_AUTO,
+            SOIL_CREATE_NEW_ID,
+            SOIL_FLAG_MIPMAPS
+    );
+    GLuint texture2 = SOIL_load_OGL_texture(
+            "/Users/dominiktrusinski/Feniks z Popiołów/GKOM/Mill2/awesomeface.png",
+            SOIL_LOAD_AUTO,
+            SOIL_CREATE_NEW_ID,
+            SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y
+    );
+
     ShaderProgram shaderProgram("/Users/dominiktrusinski/Feniks z Popiołów/GKOM/Mill2/shaders/shader.vert",
                                 "/Users/dominiktrusinski/Feniks z Popiołów/GKOM/Mill2/shaders/shader.frag");
 
-    vector<GLfloat> vertices = {
-            0.0f,  0.5f, 0.0f,      1.0f, 0.0f, 0.0f,
-            0.5f, -0.5f, 0.0f,      0.0f, 1.0f, 0.0f,
-            -0.5f, -0.5f, 0.0f,     0.0f, 0.0f, 1.0f
+    vector<GLfloat> verticesCoords = {
+            -0.5f,  -0.5f, 0.0f,    // bottom left
+            -0.5f,  0.5f, 0.0f,     // top left
+            0.5f, -0.5f, 0.0f,      // bottom right
+            0.5f, 0.5f, 0.0f,       // top right
     };
+
+    vector<GLfloat> verticesColors = {
+         1.0f, 0.0f, 0.0f,
+         0.0f, 1.0f, 0.0f,
+         0.0f, 0.0f, 1.0f,
+         0.0f, 0.0f, 0.0f
+    };
+
+    vector<GLfloat> verticesTextureCoords = {
+        0.0f, 0.0f,
+        0.0f, 1.0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f
+    };
+
+
     vector<GLuint> indices = {
             0, 1, 2,
+            1, 2, 3
     };
 
-    BasicObject rectangle(vertices, indices, &shaderProgram);
+    BasicObject rectangle(verticesCoords, verticesColors, verticesTextureCoords, indices, &shaderProgram);
 
+
+    shaderProgram.useProgram();
+    shaderProgram.setUniform("texture1", 0);
+    shaderProgram.setUniform("texture2", 1);
 
     while(!glfwWindowShouldClose(window)) {
         processInput(window);
@@ -85,7 +121,10 @@ int main() {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        rectangle.bindTexture(texture1, 0);
+        rectangle.bindTexture(texture2, 1);
         rectangle.draw();
+
 
         glfwSwapBuffers(window);
         glfwPollEvents();

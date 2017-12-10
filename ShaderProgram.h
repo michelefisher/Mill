@@ -15,6 +15,8 @@ public:
     GLint getAttribute(const string&);
     void addUniform(const string&);
     GLint getUniform(const string&);
+    void setUniform(const string&, int) ;
+    void setUniform(const string&, float) ;
     void deleteProgram();
 
 private:

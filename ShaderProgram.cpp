@@ -122,6 +122,14 @@ GLint ShaderProgram::getUniform(const string& uniform) {
     return uniformsList[uniform];
 }
 
+void ShaderProgram::setUniform(const string& uniform, int value) {
+    glUniform1i(uniformsList[uniform], value);
+}
+
+void ShaderProgram::setUniform(const string& uniform, float value) {
+    glUniform1f(uniformsList[uniform], value);
+}
+
 void ShaderProgram::deleteProgram() {
     glDeleteProgram(program);
 }
