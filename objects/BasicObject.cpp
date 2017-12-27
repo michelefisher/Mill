@@ -75,6 +75,7 @@ BasicObject::BasicObject(const vector<GLfloat>& verticesCoords, const vector<GLf
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indices.size() * sizeof(GLuint), &this->indices[0], GL_STATIC_DRAW);
 
+    /*
     // Position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -86,6 +87,16 @@ BasicObject::BasicObject(const vector<GLfloat>& verticesCoords, const vector<GLf
     // Texture attribute
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6* sizeof(float)));
     glEnableVertexAttribArray(2);
+    */
+
+    // Position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    // Texture attribute
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6* sizeof(float)));
+    glEnableVertexAttribArray(1);
+
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -113,15 +124,4 @@ void BasicObject::bindTexture(GLuint texture, unsigned short textureUnitNumber) 
 
 void BasicObject::unBindTexture() {
     glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-void BasicObject::draw() {
-    shaderProgram->useProgram();
-
-
-    glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
-
-    shaderProgram->unUseProgram();
 }
