@@ -1,25 +1,33 @@
 #pragma once
-#include <GL/glew.h>
+
 #include <vector>
 #include "../ShaderProgram.h"
+#include "Camera.h"
 
 using namespace std;
 
 class BasicObject {
 public:
     BasicObject();
-    BasicObject(const vector<GLfloat>&, const vector<GLfloat>&, const vector<GLuint>&);
-    BasicObject(const vector<GLfloat>&, const vector<GLfloat>&, const vector<GLfloat>&, const vector<GLuint>&);
-    BasicObject(const vector<GLfloat>&, const vector<GLfloat>&, const vector<GLuint>&, ShaderProgram*);
-    BasicObject(const vector<GLfloat>&, const vector<GLfloat>&, const vector<GLfloat>&, const vector<GLuint>&, ShaderProgram*);
-    void bindTexture(GLuint, unsigned short);
+    BasicObject(const vector<float>&, const vector<float>&, const vector<unsigned >&);
+    BasicObject(const vector<float>&, const vector<float>&, const vector<unsigned >&, ShaderProgram*, Camera*);
+    void bindTexture(unsigned, unsigned short);
     void unBindTexture();
 
-    void draw();
+    void draw(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
 
-private:
-    vector<GLfloat> vertices;
-    vector<GLuint> indices;
-    GLuint VAO, VBO, EBO;
+    ShaderProgram *getShaderProgram() const;
+    void setModel(const glm::mat4 &model);
+protected:
+
+protected:
+    glm::mat4 model;
+
+    void moveDataToGPU();
+
+    vector<float> vertices;
+    vector<unsigned> indices;
+    unsigned VAO, VBO, EBO;
     ShaderProgram* shaderProgram;
+    Camera* camera;
 };
