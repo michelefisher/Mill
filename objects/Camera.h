@@ -7,14 +7,13 @@
 
 class Camera {
 public:
-    explicit Camera(float, float, glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f),
+    Camera(float, float, glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f),
            glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f));
 
     glm::mat4 getViewMatrix();
     void processKeyboardInput(CameraMovement, float);
     void processMouseInput(float, float);
     glm::mat4 &getProjectionMatrix();
-    void setProjectionMatrix(const glm::mat4 &projectionMatrix);
 
     float INIT_YAW = -90.0f;
     float INIT_PITCH = 0.0f;

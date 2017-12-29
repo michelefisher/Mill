@@ -9,8 +9,10 @@ using namespace std;
 class BasicObject {
 public:
     BasicObject();
-    BasicObject(const vector<float>&, const vector<float>&, const vector<unsigned >&);
+    BasicObject(ShaderProgram*, Camera*);
     BasicObject(const vector<float>&, const vector<float>&, const vector<unsigned >&, ShaderProgram*, Camera*);
+    BasicObject(const vector<float>&, const glm::vec3&, const vector<unsigned>&, ShaderProgram*, Camera*);
+
     void bindTexture(unsigned, unsigned short);
     void unBindTexture();
 
@@ -18,13 +20,26 @@ public:
 
     ShaderProgram *getShaderProgram() const;
     void setModel(const glm::mat4 &model);
+
+    vector<float>& getVertices();
+
+    void setVertices(const vector<float> &vertices);
+
+    const vector<unsigned int> &getIndices() const;
+
+    void setIndices(const vector<unsigned int> &indices);
+
+    void setVAO(unsigned int VAO);
+    void setVBO(unsigned int VBO);
+    void setEBO(unsigned int EBO);
+    unsigned int& getVAO();
+    unsigned int& getVBO();
+    unsigned int& getEBO();
 protected:
 
-protected:
     glm::mat4 model;
 
     void moveDataToGPU();
-
     vector<float> vertices;
     vector<unsigned> indices;
     unsigned VAO, VBO, EBO;

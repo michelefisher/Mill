@@ -18,8 +18,6 @@ glm::mat4 Camera::getViewMatrix() {
 }
 
 void Camera::processKeyboardInput(CameraMovement cameraMovement, float deltaTime) {
-    std::cout << "Process keyboard input callback fired" << std::endl;
-
     float velocity = speed * deltaTime;
 
     switch (cameraMovement) {
@@ -67,8 +65,4 @@ void Camera::updateCameraVectors() {
 
 glm::mat4 &Camera::getProjectionMatrix() {
     return projectionMatrix;
-}
-
-void Camera::setProjectionMatrix(const glm::mat4 &projectionMatrix) {
-    Camera::projectionMatrix = projectionMatrix;
 }

@@ -2,8 +2,10 @@
 
 #include "Cube.h"
 
-class Plane : public Cube {
+class Plane : public BasicObject {
 public:
-    explicit Plane(float, glm::vec3 = glm::vec3(0.0f, 0.0f, 0.0f));
-    Plane(float, glm::vec3, ShaderProgram*, Camera*);
+    Plane(ShaderProgram* shaderProgram, Camera* camera, float length, glm::vec3 color);
+
+    static const vector<float> planeCoords;
+    static const vector<unsigned> indices;
 };
