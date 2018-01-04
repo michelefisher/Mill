@@ -1,5 +1,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <GL/glew.h>
+#include <iostream>
 #include "Plane.h"
 
 const vector<float> Plane::planeCoords = {
@@ -16,9 +17,19 @@ const vector<unsigned> Plane::indices = {
 
 
 Plane::Plane(ShaderProgram* shaderProgram, Camera* camera, float length, glm::vec3 color)
-        : BasicObject(Plane::planeCoords, color, Plane::indices, shaderProgram, camera) {
+        : BasicObject(camera, shaderProgram, Plane::planeCoords, color, Plane::indices), planeColor(color) {
 
     float yWidth = 1.0f/length * 0.01f;
 
     model = glm::scale(model, glm::vec3(length, yWidth, length));
 }
+
+void Plane::setShaderSpecificUniforms() {
+    shaderProgram->setVec3("objectColor", planeColor);
+    shaderProgram->setVec3("lightColor",  lightColor);
+}
+
+void Plane::setLightColor(const glm::vec3 &lightColor) {
+    Plane::lightColor = lightColor;
+}
+

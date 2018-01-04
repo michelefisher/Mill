@@ -1,9 +1,9 @@
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
-#include "Cube.h"
+#include "ColoredCube.h"
 
 
-const vector<float> Cube::cubeCoords = {
+const vector<float> ColoredCube::cubeCoords = {
             -0.5f, -0.5f, -0.5f,
             0.5f, -0.5f, -0.5f,
             0.5f, 0.5f, -0.5f,
@@ -35,7 +35,7 @@ const vector<float> Cube::cubeCoords = {
             -0.5f, 0.5f, 0.5f,
 };
 
-const vector<float> Cube::textureCoords = {
+const vector<float> ColoredCube::textureCoords = {
         0.0f, 0.0f,
         1.0f, 0.0f,
         1.0f, 1.0f,
@@ -67,7 +67,7 @@ const vector<float> Cube::textureCoords = {
         0.0f, 0.0f,
 };
 
-const vector<unsigned> Cube::indices = {
+const vector<unsigned> ColoredCube::indices = {
         0, 1, 2,
         3, 2, 0,
 
@@ -87,14 +87,19 @@ const vector<unsigned> Cube::indices = {
         23, 22, 20
 };
 
-Cube::Cube() : Cube(nullptr, nullptr, 1.0f, glm::vec3(0.0f, 0.5f, 0.0f)) {}
+ColoredCube::ColoredCube() : ColoredCube(nullptr, nullptr, 1.0f, glm::vec3(0.0f, 0.5f, 0.0f)) {}
 
-Cube::Cube(ShaderProgram* shaderProgram, Camera* camera, float sideLength, glm::vec3 sideColor)
-        : BasicObject(Cube::cubeCoords, sideColor, Cube::indices, shaderProgram, camera) {
+ColoredCube::ColoredCube(ShaderProgram* shaderProgram, Camera* camera, float sideLength, glm::vec3 sideColor)
+        : BasicObject(camera, shaderProgram, ColoredCube::cubeCoords, sideColor, ColoredCube::indices) {
     model = glm::scale(model, glm::vec3(sideLength, sideLength, sideLength));
+    this->sideColor = sideColor;
 }
 
-Cube::Cube(ShaderProgram* shaderProgram, Camera* camera, float sideLength, const vector<float>& textureCoords)
-        : BasicObject(Cube::cubeCoords, textureCoords, Cube::indices, shaderProgram, camera) {
-    model = glm::scale(model, glm::vec3(sideLength, sideLength, sideLength));
+void ColoredCube::setShaderSpecificUniforms() {
+    shaderProgram->setVec3("objectColor", sideColor);
+    shaderProgram->setVec3("lightColor",  lightColor);
+}
+
+void ColoredCube::setLightColor(const glm::vec3 &lightColor) {
+    this->lightColor = lightColor;
 }

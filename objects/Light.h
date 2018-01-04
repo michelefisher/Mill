@@ -1,14 +1,15 @@
-//
-// Created by Dominik Trusinski on 30.12.2017.
-//
+#pragma once
 
-#ifndef MILL2_LIGHT_H
-#define MILL2_LIGHT_H
+#include "ColoredCube.h"
 
+class Light : public ColoredCube {
+public:
+    Light();
+    Light(ShaderProgram* shaderProgram, Camera* camera, glm::vec3 lightColor = glm::vec3(0.0f, 0.5f, 0.0f));
 
-class Light {
+    void setShaderSpecificUniforms();
 
+    const glm::vec3 &getLightColor() const;
+private:
+    glm::vec3 lightColor;
 };
-
-
-#endif //MILL2_LIGHT_H
