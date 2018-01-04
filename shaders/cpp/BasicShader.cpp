@@ -1,10 +1,11 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include "ShaderProgram.h"
+#include "BasicShader.h"
 
 
-ShaderProgram::ShaderProgram(const char* vertexPath, const char* fragmentPath) {
+BasicShader::BasicShader(const char* vertexPath, const char* fragmentPath, glm::vec3 lightColor) :
+        lightColor(lightColor) {
     std::string _vertexCode = readShaderCode(vertexPath);
     std::string _fragmentCode = readShaderCode(fragmentPath);
     const char* vertexCode = _vertexCode.c_str();
@@ -18,11 +19,11 @@ ShaderProgram::ShaderProgram(const char* vertexPath, const char* fragmentPath) {
     glDeleteShader(fragment);
 }
 
-void ShaderProgram::use() {
+void BasicShader::use() {
     glUseProgram(programID);
 }
 
-std::string ShaderProgram::readShaderCode(const char* shaderPath) {
+std::string BasicShader::readShaderCode(const char* shaderPath) {
     std::string shaderCode;
     std::ifstream shaderFile;
 
@@ -41,7 +42,7 @@ std::string ShaderProgram::readShaderCode(const char* shaderPath) {
     return shaderCode;
 }
 
-unsigned ShaderProgram::compileShader(const char** shaderSource, GLenum type) {
+unsigned BasicShader::compileShader(const char** shaderSource, GLenum type) {
     unsigned shaderID = glCreateShader(type);
 
     glShaderSource(shaderID, 1, shaderSource, nullptr);
@@ -51,7 +52,7 @@ unsigned ShaderProgram::compileShader(const char** shaderSource, GLenum type) {
     return shaderID;
 }
 
-void ShaderProgram::linkProgram(unsigned vertexShader, unsigned fragmentShader) {
+void BasicShader::linkProgram(unsigned vertexShader, unsigned fragmentShader) {
     programID = glCreateProgram();
 
     glAttachShader(programID, vertexShader);
@@ -60,27 +61,31 @@ void ShaderProgram::linkProgram(unsigned vertexShader, unsigned fragmentShader) 
     checkLinkingErrors();
 }
 
-void ShaderProgram::setBool(const std::string &name, bool value) const {
+void BasicShader::setBool(const std::string &name, bool value) const {
     glUniform1i(glGetUniformLocation(programID, name.c_str()), (int)value);
 }
 
-void ShaderProgram::setInt(const std::string &name, int value) const {
+void BasicShader::setInt(const std::string &name, int value) const {
     glUniform1i(glGetUniformLocation(programID, name.c_str()), value);
 }
 
-void ShaderProgram::setFloat(const std::string &name, float value) const {
+void BasicShader::setFloat(const std::string &name, float value) const {
     glUniform1f(glGetUniformLocation(programID, name.c_str()), value);
 }
 
-void ShaderProgram::setMat4(const std::string &name, const glm::mat4 &mat) const {
+void BasicShader::setMat4(const std::string &name, const glm::mat4 &mat) const {
     glUniformMatrix4fv(glGetUniformLocation(programID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
 
-void ShaderProgram::setVec3(const std::string& name, const glm::vec3& vec) const {
+void BasicShader::setVec3(const std::string& name, const glm::vec3& vec) const {
     glUniform3fv(glGetUniformLocation(programID, name.c_str()), 1, &vec[0]);
 }
 
-void ShaderProgram::checkCompilationErrors(unsigned shaderID, GLenum type)
+void BasicShader::setLightColorToGlobalColor() const {
+    setVec3("lightColor", lightColor);
+}
+
+void BasicShader::checkCompilationErrors(unsigned shaderID, GLenum type)
 {
     int success;
     char infoLog[1024];
@@ -95,7 +100,7 @@ void ShaderProgram::checkCompilationErrors(unsigned shaderID, GLenum type)
     }
 }
 
-void ShaderProgram::checkLinkingErrors()
+void BasicShader::checkLinkingErrors()
 {
     int success;
     char infoLog[1024];

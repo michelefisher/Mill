@@ -5,16 +5,13 @@
 class ColoredCube : public BasicObject {
 public:
     ColoredCube();
-    ColoredCube(ShaderProgram* shaderProgram, Camera* camera, float sideLength, glm::vec3 sideColor = glm::vec3(0.0f, 0.5f, 0.0f));
-
-    void setLightColor(const glm::vec3 &lightColor);
+    ColoredCube(BasicShader* shaderProgram, Camera* camera, float sideLength, glm::vec3 sideColor = glm::vec3(0.0f, 0.5f, 0.0f));
 
     static const vector<float> cubeCoords;
     static const vector<float> textureCoords;
     static const vector<unsigned> indices;
 private:
-    void setShaderSpecificUniforms();
+    void setObjectRelatedUniforms();
     glm::vec3 sideColor;
-    glm::vec3 lightColor;
 };
 

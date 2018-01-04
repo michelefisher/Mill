@@ -6,6 +6,7 @@
 #include "objects/Plane.h"
 #include "objects/Light.h"
 
+
 using namespace std;
 
 int main() {
@@ -22,14 +23,19 @@ int main() {
             SOIL_FLAG_MIPMAPS
     );
 
-    ShaderProgram lightShader("/Users/dominiktrusinski/Programowanie/GKOM/Mill2/shaders/light.vert",
-                                "/Users/dominiktrusinski/Programowanie/GKOM/Mill2/shaders/light.frag");
+    glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
 
-    ShaderProgram textureShader("/Users/dominiktrusinski/Programowanie/GKOM/Mill2/shaders/shader.vert",
-                                "/Users/dominiktrusinski/Programowanie/GKOM/Mill2/shaders/shader.frag");
+    BasicShader lightShader("/Users/dominiktrusinski/Programowanie/GKOM/Mill2/shaders/glsl/light.vert",
+                            "/Users/dominiktrusinski/Programowanie/GKOM/Mill2/shaders/glsl/light.frag",
+                            lightColor);
 
-    ShaderProgram colorShader("/Users/dominiktrusinski/Programowanie/GKOM/Mill2/shaders/color.vert",
-                                "/Users/dominiktrusinski/Programowanie/GKOM/Mill2/shaders/color.frag");
+    BasicShader textureShader("/Users/dominiktrusinski/Programowanie/GKOM/Mill2/shaders/glsl/shader.vert",
+                              "/Users/dominiktrusinski/Programowanie/GKOM/Mill2/shaders/glsl/shader.frag",
+                              lightColor);
+
+    BasicShader colorShader("/Users/dominiktrusinski/Programowanie/GKOM/Mill2/shaders/glsl/color.vert",
+                            "/Users/dominiktrusinski/Programowanie/GKOM/Mill2/shaders/glsl/color.frag",
+                            lightColor);
 
     Light light(&lightShader, &application.getCamera(), glm::vec3(1.0f, 1.0f, 1.0f));
     light.translate(glm::vec3(0.0f, 3.0f, 0.0f));
@@ -37,16 +43,13 @@ int main() {
 
 
     Plane plane(&colorShader, &application.getCamera(), 100.0f, glm::vec3(0.5f, 0.5f, 0.5f));
-    plane.setLightColor(light.getLightColor());
     application.addObjectToScene(&plane);
 
     ColoredCube cube(&colorShader, &application.getCamera(), 1.0f, glm::vec3(1.0f, 0.5f, 0.5f));
-    cube.setLightColor(light.getLightColor());
     application.addObjectToScene(&cube);
 
     ColoredCube cube1(&colorShader, &application.getCamera(), 1.0f, glm::vec3(1.0f, 0.5f, 1.0f));
     cube1.translate(glm::vec3(3.0f,0.0f, 2.0f));
-    cube1.setLightColor(light.getLightColor());
     application.addObjectToScene(&cube1);
 
     application.run();

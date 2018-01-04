@@ -2,7 +2,7 @@
 
 Light::Light() : Light(nullptr, nullptr) {};
 
-Light::Light(ShaderProgram* shaderProgram, Camera* camera, glm::vec3 lightColor) :
+Light::Light(BasicShader* shaderProgram, Camera* camera, glm::vec3 lightColor) :
     ColoredCube(shaderProgram, camera, 1.0f, lightColor), lightColor(lightColor) {}
 
 void Light::setShaderSpecificUniforms() {

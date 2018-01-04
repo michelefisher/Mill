@@ -10,12 +10,12 @@ using namespace std;
 BasicObject::BasicObject() : shaderProgram(nullptr),
                              model(glm::mat4()) {}
 
-BasicObject::BasicObject(ShaderProgram* shaderProgram, Camera* camera) : shaderProgram(shaderProgram),
+BasicObject::BasicObject(BasicShader* shaderProgram, Camera* camera) : shaderProgram(shaderProgram),
                                                                          camera(camera),
                                                                          model(glm::mat4())
 {}
 
-BasicObject::BasicObject(Camera *camera, ShaderProgram *shaderProgram, const vector<float> &verticesCoords,
+BasicObject::BasicObject(Camera *camera, BasicShader *shaderProgram, const vector<float> &verticesCoords,
                          const vector<float> &verticesTextureCoords, const vector<unsigned> &indices) : indices(indices),
                                                                                                         shaderProgram(shaderProgram),
                                                                                                         camera(camera)
@@ -56,7 +56,7 @@ BasicObject::BasicObject(Camera *camera, ShaderProgram *shaderProgram, const vec
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-BasicObject::BasicObject(Camera *camera, ShaderProgram *shaderProgram, const vector<float> &verticesCoords,
+BasicObject::BasicObject(Camera *camera, BasicShader *shaderProgram, const vector<float> &verticesCoords,
                          const glm::vec3 &color, const vector<unsigned> &indices) :
         indices(indices),
         shaderProgram(shaderProgram), camera(camera)
@@ -104,8 +104,9 @@ void BasicObject::draw(const glm::mat4& viewMatrix, const glm::mat4& projectionM
     shaderProgram->setMat4("model", model);
     shaderProgram->setMat4("view", viewMatrix);
     shaderProgram->setMat4("projection", projectionMatrix);
+    shaderProgram->setLightColorToGlobalColor();
 
-    setShaderSpecificUniforms();
+    setObjectRelatedUniforms();
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
@@ -133,6 +134,6 @@ void BasicObject::unBindTexture() {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-ShaderProgram *BasicObject::getShaderProgram() const {
+BasicShader *BasicObject::getShaderProgram() const {
     return shaderProgram;
 }

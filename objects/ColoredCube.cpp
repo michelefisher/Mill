@@ -89,17 +89,12 @@ const vector<unsigned> ColoredCube::indices = {
 
 ColoredCube::ColoredCube() : ColoredCube(nullptr, nullptr, 1.0f, glm::vec3(0.0f, 0.5f, 0.0f)) {}
 
-ColoredCube::ColoredCube(ShaderProgram* shaderProgram, Camera* camera, float sideLength, glm::vec3 sideColor)
+ColoredCube::ColoredCube(BasicShader* shaderProgram, Camera* camera, float sideLength, glm::vec3 sideColor)
         : BasicObject(camera, shaderProgram, ColoredCube::cubeCoords, sideColor, ColoredCube::indices) {
     model = glm::scale(model, glm::vec3(sideLength, sideLength, sideLength));
     this->sideColor = sideColor;
 }
 
-void ColoredCube::setShaderSpecificUniforms() {
+void ColoredCube::setObjectRelatedUniforms() {
     shaderProgram->setVec3("objectColor", sideColor);
-    shaderProgram->setVec3("lightColor",  lightColor);
-}
-
-void ColoredCube::setLightColor(const glm::vec3 &lightColor) {
-    this->lightColor = lightColor;
 }

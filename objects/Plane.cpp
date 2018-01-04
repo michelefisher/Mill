@@ -16,7 +16,7 @@ const vector<unsigned> Plane::indices = {
 };
 
 
-Plane::Plane(ShaderProgram* shaderProgram, Camera* camera, float length, glm::vec3 color)
+Plane::Plane(BasicShader* shaderProgram, Camera* camera, float length, glm::vec3 color)
         : BasicObject(camera, shaderProgram, Plane::planeCoords, color, Plane::indices), planeColor(color) {
 
     float yWidth = 1.0f/length * 0.01f;
@@ -24,12 +24,7 @@ Plane::Plane(ShaderProgram* shaderProgram, Camera* camera, float length, glm::ve
     model = glm::scale(model, glm::vec3(length, yWidth, length));
 }
 
-void Plane::setShaderSpecificUniforms() {
+void Plane::setObjectRelatedUniforms() {
     shaderProgram->setVec3("objectColor", planeColor);
-    shaderProgram->setVec3("lightColor",  lightColor);
-}
-
-void Plane::setLightColor(const glm::vec3 &lightColor) {
-    Plane::lightColor = lightColor;
 }
 
