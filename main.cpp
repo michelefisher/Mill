@@ -1,4 +1,5 @@
 #include <iostream>
+#include <GL/glew.h>
 #include <SOIL/soil.h>
 #include "Application.h"
 #include "objects/ColoredCube.h"

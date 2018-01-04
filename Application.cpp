@@ -60,7 +60,7 @@ void Application::run() {
     while(!glfwWindowShouldClose(window->getGLFWWindow())) {
         if ((error = glGetError()) != GL_NO_ERROR) {
             glfwTerminate();
-            throw std::runtime_error("An error occured");
+            throw std::runtime_error("Render loop has detected error");
         }
 
         timer.updateDeltaTime();
