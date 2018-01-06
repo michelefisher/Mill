@@ -16,9 +16,7 @@ public:
     void bindTexture(unsigned, unsigned short);
     void unBindTexture();
 
-    void draw(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
-
-    virtual void setObjectRelatedUniforms() { return; }
+    virtual void draw(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) = 0;
 
     void translate(const glm::vec3& vector);
     void scale(const glm::vec3& vector);

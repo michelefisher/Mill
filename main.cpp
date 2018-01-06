@@ -5,6 +5,7 @@
 #include "objects/ColoredCube.h"
 #include "objects/Plane.h"
 #include "objects/Light.h"
+#include "objects/Skybox.h"
 
 
 using namespace std;
@@ -16,16 +17,22 @@ int main() {
 
     Application application(WIDTH, HEIGHT, applicationName);
 
-    GLuint texture1 = SOIL_load_OGL_texture(
-            "/Users/dominiktrusinski/Programowanie/GKOM/Mill2/container.jpg",
-            SOIL_LOAD_AUTO,
-            SOIL_CREATE_NEW_ID,
-            SOIL_FLAG_MIPMAPS
-    );
+    vector<std::string> faces = {
+            "/Users/dominiktrusinski/Programowanie/GKOM/Mill2/assets/Meadow/posx.jpg",
+            "/Users/dominiktrusinski/Programowanie/GKOM/Mill2/assets/Meadow/negx.jpg",
+            "/Users/dominiktrusinski/Programowanie/GKOM/Mill2/assets/Meadow/posy.jpg",
+            "/Users/dominiktrusinski/Programowanie/GKOM/Mill2/assets/Meadow/negy.jpg",
+            "/Users/dominiktrusinski/Programowanie/GKOM/Mill2/assets/Meadow/posz.jpg",
+            "/Users/dominiktrusinski/Programowanie/GKOM/Mill2/assets/Meadow/negz.jpg",
+    };
 
     glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
 
-    BasicShader lightShader("/Users/dominiktrusinski/Programowanie/GKOM/Mill2/shaders/glsl/light.vert",
+    BasicShader skyboxShader("/Users/dominiktrusinski/Programowanie/GKOM/Mill2/shaders/glsl/skybox.vert",
+                            "/Users/dominiktrusinski/Programowanie/GKOM/Mill2/shaders/glsl/skybox.frag",
+                            lightColor);
+
+     BasicShader lightShader("/Users/dominiktrusinski/Programowanie/GKOM/Mill2/shaders/glsl/light.vert",
                             "/Users/dominiktrusinski/Programowanie/GKOM/Mill2/shaders/glsl/light.frag",
                             lightColor);
 
@@ -37,13 +44,13 @@ int main() {
                             "/Users/dominiktrusinski/Programowanie/GKOM/Mill2/shaders/glsl/color.frag",
                             lightColor);
 
+
     Light light(&lightShader, &application.getCamera(), glm::vec3(1.0f, 1.0f, 1.0f));
     light.translate(glm::vec3(0.0f, 3.0f, 0.0f));
     application.addObjectToScene(&light);
 
-
-    Plane plane(&colorShader, &application.getCamera(), 100.0f, glm::vec3(0.5f, 0.5f, 0.5f));
-    application.addObjectToScene(&plane);
+    /* Plane plane(&colorShader, &application.getCamera(), 100.0f, glm::vec3(0.0f, 1.0f, 0.5f));
+    application.addObjectToScene(&plane); */
 
     ColoredCube cube(&colorShader, &application.getCamera(), 1.0f, glm::vec3(1.0f, 0.5f, 0.5f));
     application.addObjectToScene(&cube);
@@ -51,6 +58,9 @@ int main() {
     ColoredCube cube1(&colorShader, &application.getCamera(), 1.0f, glm::vec3(1.0f, 0.5f, 1.0f));
     cube1.translate(glm::vec3(3.0f,0.0f, 2.0f));
     application.addObjectToScene(&cube1);
+
+    Skybox skybox(&skyboxShader, faces);
+    application.addObjectToScene(&skybox);
 
     application.run();
 

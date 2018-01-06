@@ -7,11 +7,12 @@ public:
     ColoredCube();
     ColoredCube(BasicShader* shaderProgram, Camera* camera, float sideLength, glm::vec3 sideColor = glm::vec3(0.0f, 0.5f, 0.0f));
 
-    static const vector<float> cubeCoords;
+    void draw(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) override;
+
+    static const vector<float> verticesCoords;
     static const vector<float> textureCoords;
     static const vector<unsigned> indices;
 private:
-    void setObjectRelatedUniforms();
     glm::vec3 sideColor;
 };
 

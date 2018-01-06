@@ -74,6 +74,8 @@ void Application::run() {
             object->draw(camera.getViewMatrix(), camera.getProjectionMatrix());
         }
 
+        skybox->draw(camera.getViewMatrix(), camera.getProjectionMatrix());
+
         glfwSwapBuffers(window->getGLFWWindow());
         glfwPollEvents();
     }
@@ -83,6 +85,10 @@ void Application::run() {
 
 void Application::addObjectToScene(BasicObject* basicObject) {
     objectsToDraw.push_back(basicObject);
+}
+
+void Application::addObjectToScene(Skybox* skybox) {
+    this->skybox = skybox;
 }
 
 void Application::processInput(GLFWwindow* glfwWindow) {

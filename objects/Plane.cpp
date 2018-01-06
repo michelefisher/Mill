@@ -24,7 +24,18 @@ Plane::Plane(BasicShader* shaderProgram, Camera* camera, float length, glm::vec3
     model = glm::scale(model, glm::vec3(length, yWidth, length));
 }
 
-void Plane::setObjectRelatedUniforms() {
+void Plane::draw(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
+    shaderProgram->use();
+
+    shaderProgram->setMat4("model", model);
+    shaderProgram->setMat4("view", viewMatrix);
+    shaderProgram->setMat4("projection", projectionMatrix);
+    shaderProgram->setLightColorToGlobalColor();
+
     shaderProgram->setVec3("objectColor", planeColor);
+
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
 }
 

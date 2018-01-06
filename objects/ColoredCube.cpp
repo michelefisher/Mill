@@ -3,7 +3,7 @@
 #include "ColoredCube.h"
 
 
-const vector<float> ColoredCube::cubeCoords = {
+const vector<float> ColoredCube::verticesCoords = {
             -0.5f, -0.5f, -0.5f,
             0.5f, -0.5f, -0.5f,
             0.5f, 0.5f, -0.5f,
@@ -90,11 +90,22 @@ const vector<unsigned> ColoredCube::indices = {
 ColoredCube::ColoredCube() : ColoredCube(nullptr, nullptr, 1.0f, glm::vec3(0.0f, 0.5f, 0.0f)) {}
 
 ColoredCube::ColoredCube(BasicShader* shaderProgram, Camera* camera, float sideLength, glm::vec3 sideColor)
-        : BasicObject(camera, shaderProgram, ColoredCube::cubeCoords, sideColor, ColoredCube::indices) {
+        : BasicObject(camera, shaderProgram, ColoredCube::verticesCoords, sideColor, ColoredCube::indices) {
     model = glm::scale(model, glm::vec3(sideLength, sideLength, sideLength));
     this->sideColor = sideColor;
 }
 
-void ColoredCube::setObjectRelatedUniforms() {
+void ColoredCube::draw(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
+    shaderProgram->use();
+
+    shaderProgram->setMat4("model", model);
+    shaderProgram->setMat4("view", viewMatrix);
+    shaderProgram->setMat4("projection", projectionMatrix);
+    shaderProgram->setLightColorToGlobalColor();
+
     shaderProgram->setVec3("objectColor", sideColor);
+
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
 }

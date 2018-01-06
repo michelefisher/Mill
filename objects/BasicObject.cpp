@@ -98,21 +98,6 @@ BasicObject::BasicObject(Camera *camera, BasicShader *shaderProgram, const vecto
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void BasicObject::draw(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
-    shaderProgram->use();
-
-    shaderProgram->setMat4("model", model);
-    shaderProgram->setMat4("view", viewMatrix);
-    shaderProgram->setMat4("projection", projectionMatrix);
-    shaderProgram->setLightColorToGlobalColor();
-
-    setObjectRelatedUniforms();
-
-    glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
-}
-
 void BasicObject::translate(const glm::vec3& vector) {
     model = glm::translate(model, vector);
 }
